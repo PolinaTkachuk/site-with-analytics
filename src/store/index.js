@@ -1,14 +1,13 @@
 import { createStore } from 'vuex'
-
+import {registerUsersModule} from "@/store/registerUsersModule";
+import {AuthModule} from "@/store/AuthModule"
+import {logoutModule} from "@/store/logoutModule";
 export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+  //ядро в vuex
   modules: {
+    Register: registerUsersModule,
+    Auth: AuthModule,
+    Logout: logoutModule,
   }
 })
+
