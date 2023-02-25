@@ -1,14 +1,14 @@
 <template>
   <my-border-block>
-    <!--@submit.prevent="register"-->
-    <form @submit.prevent="register" >
+    <!--@submit.prevent="Register"-->
+    <form @submit.prevent="$router.push('/MainPage')" >
       <h2 >SignUp</h2>
-      <my-input  v-model="login" required placeholder="login" type="text" autofocus></my-input>
+      <my-input v-model="name" required placeholder="name" type="text" autofocus></my-input>
       <my-input  v-model="password" required placeholder="password"></my-input>
       <my-input  v-model="email" required placeholder="email"></my-input>
       <br/>
-      <!--проверить данные и внести в бд   // перенаправл на главную страниц-->
-      <my-button class="btn" @click.prevent="$router.push('/MainPage')"  type="submit">SignUp</my-button>
+      <!--проверить данные и внести в бд   // перенаправл на главную страниц $router.push('/MainPage')-->
+      <my-button class="btn" @click.prevent="register"  type="submit">SignUp</my-button>
     </form>
   </my-border-block>
 </template>
@@ -24,7 +24,7 @@ export default {
   components: {MyInput, MyButton, MyBorderBlock},
   data() {
     return {
-      login: "",
+      name: "",
       email: "",
       password: ""
     }
@@ -34,28 +34,27 @@ export default {
     setStatusRequest:'Register/setStatusRequest',
     setStatusError:'Register/setStatusError',
   }),
-  ...mapActions({
-    RegisterUsers:'Register/register',
-  }),
 
   methods: {
-    register: function () {
+    ...mapActions({
+      Register:'Register/Register',
+    }),
+
+    register (){
       //считываем данные с формы
       let data = {
         login: this.name,
         email: this.email,
         password: this.password,
       }
-      try {
-        //вызываем action
-        //отправляем данные с инпутов в fetch который обраборает данные
-        this.$store.dispatch('register', data)
-      } catch(e) {
-        console.log(e)
-      }
-    }
-  },
+      console.log(data)
+      //вызываем action
+      //отправляем данные с инпутов в store который обраборает данные
+      this.Register(data)
 
+    },
+
+  },
   computed: {
     ...mapState({
       status: state => state.Register.status,

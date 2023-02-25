@@ -1,12 +1,12 @@
 <template>
   <my-border-block>
-    <form @submit.prevent="signIn">
+    <form @@submit.prevent="$router.push('/MainPage')">
       <h2 >SignIn</h2>
-      <my-input  v-model="login" required placeholder="login" type="text" autofocus></my-input>
+      <my-input v-model="login" required placeholder="name" type="text" autofocus></my-input>
       <my-input  v-model="password" required placeholder="password"></my-input>
       <br/>
       <!--проверить данные и внести в бд   // перенаправл на главную страниц-->
-      <my-button class="btn" @click="login"  type="submit">SignIn</my-button>
+      <my-button class="btn" @click.prevent="SignIn"  type="submit">SignIn</my-button>
     </form>
   </my-border-block>
 </template>
@@ -27,45 +27,41 @@ export default {
     }
   },
   ...mapMutations({
-    setUserSuccess:'Register/setUserSuccess',
-    setStatusRequest:'Register/setStatusRequest',
-    setStatusError:'Register/setStatusError',
-  }),
-  ...mapActions({
-    RegisterUsers:'Register/register',
+    setUserSuccess:'Auth/setUserSuccess',
+    setStatusRequest:'Auth/setStatusRequest',
+    setStatusError:'Auth/setStatusError',
   }),
 
+
   methods: {
+
+    ...mapActions({
+      signIn:'Auth/signIn',
+    }),
     //НУЖНО ОЛУЧИТЬ ПРОМИС
-     signIn () {
+     SignIn () {
       //считываем данные с формы
-      let login = this.login
-      let password = this.password
-      try {
+       let data={
+         name: this.name,
+         password:this.password
+       }
+       this.signIn(data)
         //вызываем action
         //отправляем данные с инпутов в fetch который обраборает данные
-        this.$store.dispatch('signIn', { login, password })
-            .then(()=> {
-              // перенаправл на главную страницу
-               this.$router.push('/MainPage')
-               })
-      }
-      catch(e) {
-        console.log(e)
-      }
+
     },
   },
 
   computed: {
     ...mapState({
-      status: state => state.Register.status,
-      user: state => state.Register.user,
+      status: state => state.Auth.status,
+      user: state => state.Auth.user,
     }),
   },
   /*
     mounted() {
       let data = {
-        login: this.name,
+        name: this.name,
         email: this.email,
         password: this.password,
       }

@@ -6,8 +6,8 @@
 
       <div @click.stop="updatePanel" class="content">
         <slot>
-        <div>Profile</div>
-        <a href="#" class="">recommendations</a>
+          <a href="/MainPage/Profile" class="">Profile</a>
+        <a href="/MainPage/Recommendations" class="">recommendations</a>
         <a href="#" class="">tracked groups</a>
           <!--
           перенаправл на страницу с авторизацией и идем в localStore
@@ -68,17 +68,16 @@ export default {
   position: fixed;
   background: lightblue;
   border: 2px solid gray;
-
   font-size: 22px;
   float: left;
-  min-width: 18%;
-  max-width: 25%;
+  width: 33vw;
   height: auto;
 }
 .content{
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
+  flex-wrap: wrap;
 
   margin: auto;
   color: white;

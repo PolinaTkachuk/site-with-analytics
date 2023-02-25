@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 export const registerUsersModule = {
     state: () => ({
         status: '',
@@ -12,7 +13,15 @@ export const registerUsersModule = {
         }
     }),
     getters: {
-
+        getLogin: state => {
+            return state.user.login;
+        },
+        getPassword: state => {
+            return state.user.password;
+        },
+        getEmail: state => {
+            return state.user.email;
+        },
     },
     mutations: {
         setStatusRequest(state){
@@ -31,17 +40,23 @@ export const registerUsersModule = {
     actions: {
        // async fetchFormRegister( commit, user) {
        //     try {
-        register({commit}, user) {
-                return new Promise((resolve, reject) => {
+        Register({commit}, user) {
+                console.log("1REGISTR")
+                return new Promise( (resolve,reject) => {
                     commit('setStatusRequest');
-                    let response = axios.post('https://localhost:8080/RegisterUsers', {user})
+                    //axios({url: 'https://localhost:8080/RegisterUsers', data: user, method: 'POST' })
+                    axios.post('http://localhost:8000/RegisterUsers', {
+                        user: user,
+                        header: ("Access-Control-Allow-Origin: *"),
+                    })
                         .then(response=>{
+                            console.log("2REGISTR")
                             const token = response.data.token //получаем токен от тела ответа от сервера
                             //получаем юзера из тех данных, что вводил пользователь и лежат на сервере (РЕАЛИЗУЕМ из БД)
-                            const user = response.data.user
+                            let user = response.data.user
                             localStorage.setItem('token', token)
                             commit('setUserSuccess', token, user)
-                            resolve(response)
+
                         })
                 })//отлавливаем ошибки - меняем статус удаляем токен
                 .catch (error =>{
@@ -53,8 +68,3 @@ export const registerUsersModule = {
     },
     namespaced: true
 }
-/*.finally {
-                commit('setStatusRequest', 'loading');
-            }*/
-
-

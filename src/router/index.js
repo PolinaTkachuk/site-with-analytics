@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import SignUpForm from "@/components/SignUpForm.vue";
 import MainPage from "@/components/MainPage.vue";
 import AuthForm from "@/components/AuthForm.vue";
+import Recommendations from "@/components/Recommendations.vue"
+import Profile from "@/components/Profile.vue";
 
 const routes = [
   {
@@ -12,10 +14,18 @@ const routes = [
     path: '/MainPage',
     component: MainPage,
   },
-
+  {
+    path: '/MainPage/Profile',
+    component: Profile,
+  },
   {
     path: '/AuthUsers',
     component: AuthForm,
+  },
+
+  {
+    path: '/MainPage/Recommendations',
+    component: Recommendations,
   },
 
 ]
@@ -32,7 +42,7 @@ router.beforeEach((to, from, next) => {
       next()
       return
     }
-    next('/login')
+    next('/name')
   } else {
     next()
   }

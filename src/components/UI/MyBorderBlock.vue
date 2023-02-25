@@ -20,6 +20,7 @@ export default {
 }
 
 .block{
+
   display:flex;
 
   margin: 10% auto;

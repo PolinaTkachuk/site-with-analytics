@@ -9,7 +9,7 @@
     <!--кликнули на кнопку- показалась панель
   это родитель, связали с ребенком MySidePanel
   и с его методом showPanel, изначально не видно-->
-    <my-button v-on:click.stop="showDialog" class="button">&#9776;</my-button>
+    <my-button v-on:click.stop="showDialog" class="button" v-bind:class="{'active':dialogVisible}">&#9776;</my-button>
 
     <div >
       <div class="text-content">
@@ -39,7 +39,6 @@ export default {
   methods:{
     showDialog() {
       this.dialogVisible = true;
-      console.log("dnfgkjdgjk")
     },
     hideDialog() {
       this.dialogVisible = false;
@@ -63,7 +62,7 @@ export default {
 }
 .active{
   background: lightgray;
-  margin-left: 25%;
+  margin-left: 33vw;
 }
 .button{
 
