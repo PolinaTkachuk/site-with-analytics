@@ -17,6 +17,7 @@ export const logoutModule = {
             return new Promise(() => {
                 commit('setLogout')
                 localStorage.removeItem('token')
+                delete axios.defaults.headers.common['Authorization']
                 console.log("token removed")
             })
         }

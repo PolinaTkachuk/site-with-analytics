@@ -44,27 +44,31 @@ export const registerUsersModule = {
                 console.log("1REGISTR")
                 return new Promise( (resolve,reject) => {
                     commit('setStatusRequest');
-                    //axios({url: 'https://localhost:8080/RegisterUsers', data: user, method: 'POST' })
-                    axios.post('http://localhost:8000/RegisterUsers', {
+                    axios.post('http://diploma.local:8000/api/signup', {
                         user: user,
-                        header: ("Access-Control-Allow-Origin: *"),
+                       // header: ("Access-Control-Allow-Origin: *"),
                     })
                         .then(response=>{
-                            console.log("2REGISTR")
+                            console.log(response.data);
+                            alert('SUCCESS');
+                            return;
                             const token = response.data.token //получаем токен от тела ответа от сервера
                             //получаем юзера из тех данных, что вводил пользователь и лежат на сервере (РЕАЛИЗУЕМ из БД)
                             let user = response.data.user
                             localStorage.setItem('token', token)
+                            axios.defaults.headers.common['Authorization'] = token
                             commit('setUserSuccess', token, user)
 
                         })
                 })//отлавливаем ошибки - меняем статус удаляем токен
                 .catch (error =>{
                     console.log(error)
+                    console.error(error.response.data);
                     localStorage.removeItem('token')
                     commit('setStatusError', error)
                 })
         }
     },
+
     namespaced: true
 }

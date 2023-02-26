@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import axios from "axios";
+import router from "@/router";
 
 export const AuthModule = {
     state: () => ({
@@ -50,12 +51,13 @@ export const AuthModule = {
         signIn({commit}, user) {
             return new Promise((resolve, reject) => {
                 commit('setStatusRequest');
-                axios.post('https://localhost:8080/AuthUsers', {user})
+                axios.post('http://localhost:8000/api/signup', {user})
                     .then(response=>{
                         const token = response.data.token //получаем токен от тела ответа от сервера
                         //получаем юзера из тех данных, что вводил пользователь и лежат на сервере (РЕАЛИЗУЕМ из БД)
                         const user = response.data.user
                         localStorage.setItem('token', token)
+                        axios.defaults.headers.common['Authorization'] = token
                         commit('setUserSuccess', token, user)
                         resolve(response)
                     })
@@ -80,7 +82,37 @@ export const AuthModule = {
                 console.log(e)
             }
         },
+        //проброс токена
+        initApi(){
+            // start request
+            const api = axios.create();
+            api.interceptors.request.use(config => {
+                if(localStorage.getItem('access_token')){
+                    config.headers = {
+                        'authorization': ` Bearer ${localStorage.getItem('access_token')}`
+                    };
+                }
+                return config;
+                },
+                error =>{})
 
+            // end request
+            api.interceptors.request.use(config => {
+                if(localStorage.getItem('access_token')){
+                    config.headers = {
+                        'authorization': ` Bearer ${localStorage.getItem('access_token')}`
+                    };
+                }
+                return config;
+            }, error =>{
+                if(error.response.status === 401){
+                    router.push('/AuthUsers')
+                }
+
+            })
+
+            this.api=api;
+        },
     },
     namespaced: true
 }

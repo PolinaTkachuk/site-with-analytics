@@ -60,7 +60,8 @@ export default {
 
   methods:{
     ...mapActions({
-      UpdateUsers:'Auth/UpdateUsers'
+      UpdateUsers:'Auth/UpdateUsers',
+      isApi:'Auth/initApi'
     }),
     ...mapMutations({
       setUserSuccess:'Auth/setUserSuccess',
@@ -113,8 +114,9 @@ export default {
       return this.$store.getters.getEmail
     }
   },
-
-
+  mounted() {
+    this.initApi()
+  }
 }
 
 

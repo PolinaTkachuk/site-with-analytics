@@ -38,7 +38,9 @@ export default {
     }
   },
   methods:{
-
+    ...mapActions({
+      isApi:'Auth/initApi'
+    }),
     ...mapMutations({
       setPage:'Loading/setPage',
     }),
@@ -66,6 +68,7 @@ export default {
   },
 
   mounted() {
+    this.isApi();
     //const group= document.querySelector('')
     this.fetchGroups();
   }

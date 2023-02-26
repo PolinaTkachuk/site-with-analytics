@@ -29,6 +29,8 @@
 <script>
 import MySidePanel from "@/components/UI/MySidePanel.vue";
 import MyButton from "@/components/UI/MyButton.vue";
+import {mapActions} from "vuex";
+
 export default {
   components:{MyButton, MySidePanel},
   data() {
@@ -37,6 +39,10 @@ export default {
     }
   },
   methods:{
+
+    ...mapActions({
+      initApi:'Auth/initApi',
+    }),
     showDialog() {
       this.dialogVisible = true;
     },
@@ -44,6 +50,9 @@ export default {
       this.dialogVisible = false;
       console.log("no")
     },
+  },
+  mounted() {
+    this.initApi()
   }
 }
 

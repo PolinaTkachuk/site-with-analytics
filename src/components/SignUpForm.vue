@@ -61,6 +61,10 @@ export default {
       user: state => state.Register.user,
     }),
   },
+
+  mounted() {
+
+  }
 }
 
 </script>
