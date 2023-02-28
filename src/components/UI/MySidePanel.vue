@@ -24,7 +24,7 @@
 <script>
 import {mapState, mapMutations, mapGetters,mapActions} from "vuex";
 export default {
-  name:'my-side-panel',
+  email:'my-side-panel',
 
   props:{
     showPanel:{

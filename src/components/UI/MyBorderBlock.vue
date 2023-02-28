@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name:'my-border-block',
+  email:'my-border-block',
 }
 </script>
 

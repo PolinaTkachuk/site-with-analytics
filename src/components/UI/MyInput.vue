@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name:'my-input',
+  email:'my-input',
   props:{
     modelValue:[String, Number,],
   },

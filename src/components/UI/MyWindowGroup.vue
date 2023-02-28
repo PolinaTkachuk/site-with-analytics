@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name:'my-window-group',
+  email:'my-window-group',
 
 }
 </script>

@@ -4,7 +4,7 @@ import axios from "axios";
 export const registerUsersModule = {
     state: () => ({
         status: '',
-        token: localStorage.getItem('token') || '',
+        token: localStorage.getItem('access_token') || '',
         user : {
             id:'',
             login:'',
@@ -38,15 +38,12 @@ export const registerUsersModule = {
         },
     },
     actions: {
-       // async fetchFormRegister( commit, user) {
-       //     try {
         Register({commit}, user) {
                 console.log("1REGISTR")
                 return new Promise( (resolve,reject) => {
                     commit('setStatusRequest');
                     axios.post('http://diploma.local:8000/api/signup', {
-                        user: user,
-                       // header: ("Access-Control-Allow-Origin: *"),
+                        user: user
                     })
                         .then(response=>{
                             console.log(response.data);
@@ -55,7 +52,7 @@ export const registerUsersModule = {
                             const token = response.data.token //получаем токен от тела ответа от сервера
                             //получаем юзера из тех данных, что вводил пользователь и лежат на сервере (РЕАЛИЗУЕМ из БД)
                             let user = response.data.user
-                            localStorage.setItem('token', token)
+                            localStorage.setItem('access_token', token)
                             axios.defaults.headers.common['Authorization'] = token
                             commit('setUserSuccess', token, user)
 
@@ -64,7 +61,7 @@ export const registerUsersModule = {
                 .catch (error =>{
                     console.log(error)
                     console.error(error.response.data);
-                    localStorage.removeItem('token')
+                    localStorage.removeItem('access_token')
                     commit('setStatusError', error)
                 })
         }

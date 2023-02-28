@@ -5,10 +5,9 @@ import router from "@/router";
 export const AuthModule = {
     state: () => ({
         status: '',
-        token: localStorage.getItem('token') || '',
+        token: localStorage.getItem('access_token') || '',
         user : {
             id:'',
-            login:'',
             password:'',
             email:'',
         }
@@ -51,12 +50,15 @@ export const AuthModule = {
         signIn({commit}, user) {
             return new Promise((resolve, reject) => {
                 commit('setStatusRequest');
-                axios.post('http://localhost:8000/api/signup', {user})
+                axios.post('http://diploma.local:8000/api/login', {user})
                     .then(response=>{
-                        const token = response.data.token //получаем токен от тела ответа от сервера
+                        console.log("AUTHHHHHHHHHHHHH")
+                        const token = response.data.token //получаем токен от сервера
                         //получаем юзера из тех данных, что вводил пользователь и лежат на сервере (РЕАЛИЗУЕМ из БД)
                         const user = response.data.user
-                        localStorage.setItem('token', token)
+                        // Храним полученный токен в localStorage
+                        localStorage.setItem('access_token', token)
+                        //console.log(JSON.parse(localStorage.getItem('access_token')))
                         axios.defaults.headers.common['Authorization'] = token
                         commit('setUserSuccess', token, user)
                         resolve(response)
@@ -64,7 +66,7 @@ export const AuthModule = {
             })//отлавливаем ошибки - меняем статус удаляем токен
                 .catch (error =>{
                     console.log(error)
-                    localStorage.removeItem('token')
+                    localStorage.removeItem('access_token')
                     commit('setStatusError', error)
                 })
         },
@@ -73,7 +75,7 @@ export const AuthModule = {
                 //const response = await axios.get('https://localhost:8080/AuthUsers', {user})
                 //let user=   response.data.user
                 //токен сохраняем тому же пользователю с новыми данными юзера
-                let token = localStorage.getItem('token')
+                let token = localStorage.getItem('access_token')
                 commit('setUpdateUsers', user, token)
 
                 console.log(token)

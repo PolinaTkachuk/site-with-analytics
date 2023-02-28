@@ -2,7 +2,7 @@
   <my-border-block>
     <form @@submit.prevent="$router.push('/MainPage')">
       <h2 >SignIn</h2>
-      <my-input v-model="login" required placeholder="name" type="text" autofocus></my-input>
+      <my-input v-model="email" required placeholder="email" type="text" autofocus></my-input>
       <my-input  v-model="password" required placeholder="password"></my-input>
       <br/>
       <!--проверить данные и внести в бд   // перенаправл на главную страниц-->
@@ -22,7 +22,7 @@ export default {
   components: {MyInput, MyButton, MyBorderBlock},
   data() {
     return {
-      login: "",
+      email: "",
       password: ""
     }
   },
@@ -42,13 +42,10 @@ export default {
      SignIn () {
       //считываем данные с формы
        let data={
-         name: this.name,
+         email: this.email,
          password:this.password
        }
        this.signIn(data)
-        //вызываем action
-        //отправляем данные с инпутов в fetch который обраборает данные
-
     },
   },
 
@@ -61,7 +58,7 @@ export default {
   /*
     mounted() {
       let data = {
-        name: this.name,
+        email: this.email,
         email: this.email,
         password: this.password,
       }

@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
       next()
       return
     }
-    next('/name')
+    next('/email')
   } else {
     next()
   }

@@ -3,7 +3,7 @@
     <!--@submit.prevent="Register"-->
     <form @submit.prevent="$router.push('/MainPage')" >
       <h2 >SignUp</h2>
-      <my-input v-model="name" required placeholder="name" type="text" autofocus></my-input>
+      <my-input v-model="name" required placeholder="email" type="text" autofocus></my-input>
       <my-input  v-model="password" required placeholder="password"></my-input>
       <my-input  v-model="email" required placeholder="email"></my-input>
       <br/>
