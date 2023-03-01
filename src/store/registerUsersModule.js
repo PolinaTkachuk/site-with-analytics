@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "@/router";
 
 
 export const registerUsersModule = {
@@ -6,10 +7,12 @@ export const registerUsersModule = {
         status: '',
         token: localStorage.getItem('access_token') || '',
         user : {
-            id:'',
+           /* id:'',
             login:'',
             password:'',
             email:'',
+
+            */
         }
     }),
     getters: {
@@ -31,37 +34,48 @@ export const registerUsersModule = {
             state.status = 'error'
         },
         //успешно полученны данные
-        setUserSuccess(state, token, user){
+        setUserSuccess(state, token, id){
             state.status = 'success'
             state.token = token
-            state.user = user
+            state.user.id = id
         },
+        setUserId(state, id){
+            state.user.id = id
+        }
     },
     actions: {
         Register({commit}, user) {
-                console.log("1REGISTR")
-                return new Promise( (resolve,reject) => {
-                    commit('setStatusRequest');
-                    axios.post('http://diploma.local:8000/api/signup', {
-                        user: user
-                    })
-                        .then(response=>{
-                            console.log(response.data);
-                            alert('SUCCESS');
-                            return;
-                            const token = response.data.token //получаем токен от тела ответа от сервера
-                            //получаем юзера из тех данных, что вводил пользователь и лежат на сервере (РЕАЛИЗУЕМ из БД)
-                            let user = response.data.user
-                            localStorage.setItem('access_token', token)
-                            axios.defaults.headers.common['Authorization'] = token
-                            commit('setUserSuccess', token, user)
+            console.log("1REGISTR")
+            return new Promise((resolve, reject) => {
+                commit('setStatusRequest');
+                axios.post('http://diploma.local:8000/api/signup', {
+                    user: user
+                })
+                    .then(response => {
+                        console.log(response.data);
+                        alert('SUCCESS');
+                        //return;
+                        let convert_response = JSON.parse(JSON.stringify(response.data));
 
-                        })
-                })//отлавливаем ошибки - меняем статус удаляем токен
+                        let token = convert_response.access_token; //получаем токен от тела ответа от сервера
+                        const id = convert_response.id;
+                        console.log(convert_response.id);
+                        console.log(token);
+
+                        localStorage.setItem('access_token', token);//устанавливаем токен
+                        localStorage.setItem('id', id);//устанавливаем id в стор, чтобы в profile изменять данные по id
+                        axios.defaults.headers.common['Authorization'] = token
+                        commit('setUserSuccess', token, id); //заносим id в юзера
+                        commit('setUserId', id);
+                        router.push('/main');
+
+                    })
+            })//отлавливаем ошибки - меняем статус удаляем токен
                 .catch (error =>{
                     console.log(error)
                     console.error(error.response.data);
                     localStorage.removeItem('access_token')
+                    localStorage.removeItem('id')
                     commit('setStatusError', error)
                 })
         }

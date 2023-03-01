@@ -1,6 +1,6 @@
 <template>
   <my-border-block>
-    <form @@submit.prevent="$router.push('/MainPage')">
+    <form @@submit.prevent="$router.push('/main')">
       <h2 >SignIn</h2>
       <my-input v-model="email" required placeholder="email" type="text" autofocus></my-input>
       <my-input  v-model="password" required placeholder="password"></my-input>
@@ -17,6 +17,7 @@ import MyInput from "@/components/UI/MyInput.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import MyBorderBlock from "@/components/UI/MyBorderBlock.vue";
 import {mapState, mapMutations, mapGetters,mapActions} from "vuex";
+import router from "@/router";
 
 export default {
   components: {MyInput, MyButton, MyBorderBlock},
@@ -46,6 +47,11 @@ export default {
          password:this.password
        }
        this.signIn(data)
+         .then(() => {
+           // перенаправл на главную страницу
+           router.push('/main');
+         })
+           .catch(err => console.log(err))
     },
   },
 
@@ -54,24 +60,14 @@ export default {
       status: state => state.Auth.status,
       user: state => state.Auth.user,
     }),
-  },
-  /*
-    mounted() {
-      let data = {
-        email: this.email,
-        email: this.email,
-        password: this.password,
-      }
-      //отправляем данные с инпутов в fetch который обраборает данные
-      this.fetchFormRegister(data)
-          //.then(() => {
-            // перенаправл на главную страницу
-          //  this.$router.push('/MainPage')
-         // })
-          .catch(err => console.log(err))
-    }
+    ...mapGetters({
+      getLogin:'Auth/getLogin',
+      getPassword:'Auth/getPassword',
+      getEmail:'Auth/getEmail',
+    }),
 
-*/
+  },
+
 }
 
 </script>

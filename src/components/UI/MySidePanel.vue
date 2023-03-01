@@ -6,14 +6,10 @@
 
       <div @click.stop="updatePanel" class="content">
         <slot>
-          <a href="/MainPage/Profile" class="">Profile</a>
-        <a href="/MainPage/Recommendations" class="">recommendations</a>
+          <a href="/main/profile" class="">Profile</a>
+        <a href="/main/recommendations" class="">recommendations</a>
         <a href="#" class="">tracked groups</a>
-          <!--
-          перенаправл на страницу с авторизацией и идем в localStore
-          для remove токена пользователя
-          -->
-        <a href='/AuthUsers' class="logout"  @click="logoutUsers">logout</a>
+        <a href='/auth' class="logout"  @click="logoutUsers">logout</a>
           <router-view></router-view>
         </slot>
       </div>

@@ -7,24 +7,24 @@ import Profile from "@/components/Profile.vue";
 
 const routes = [
   {
-    path: '/RegisterUsers',
+    path: '/register',
     component: SignUpForm,
   },
   {
-    path: '/MainPage',
+    path: '/main',
     component: MainPage,
   },
   {
-    path: '/MainPage/Profile',
+    path: '/main/profile',
     component: Profile,
   },
   {
-    path: '/AuthUsers',
+    path: '/auth',
     component: AuthForm,
   },
 
   {
-    path: '/MainPage/Recommendations',
+    path: '/main/recommendations',
     component: Recommendations,
   },
 

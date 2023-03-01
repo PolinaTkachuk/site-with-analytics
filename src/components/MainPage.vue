@@ -14,6 +14,7 @@
     <div >
       <div class="text-content">
 
+
         MAIN
 
         Но в отличие от v-if директива v-show не изменяет структуру DOM, а манипулирует значением стилевого свойства display. То есть если условие в v-show возвращает false, то для элемента устанавливается стиль display:none;, и тем самым данный элемент скрывается на веб-странице.
@@ -29,13 +30,15 @@
 <script>
 import MySidePanel from "@/components/UI/MySidePanel.vue";
 import MyButton from "@/components/UI/MyButton.vue";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   components:{MyButton, MySidePanel},
   data() {
     return {
       dialogVisible: false,
+      id:"",
+      name: "",
     }
   },
   methods:{
@@ -53,6 +56,18 @@ export default {
   },
   mounted() {
     this.initApi()
+  },
+  computed:{
+    ...mapState({
+      user: state => state.Auth.user,
+    }),
+    ...mapGetters({
+      getById:'Auth/getById',
+      getLogin:'Auth/getLogin',
+    }),
+    getById: state=>state.user.id,
+    getLogin: state=>state.user.name,
+
   }
 }
 

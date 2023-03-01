@@ -17,21 +17,23 @@
       <div class="text-content">
         <div>Profile</div>
         <!--логин- данные логина-->
-        <div class="login">Login: <div>{{this.getLogin}}</div>
+        <div class="login">Login: <div>{{getLogin}}</div>
           <!--логин можно изменить в инпуте-->
-          <my-input v-model="login" v-if="InputActive">{{this.getLogin}}</my-input>
+          <my-input v-model="name" v-if="InputActive"></my-input>
         </div>
+
+<!--
 
         <div class="password">Password: <div>{{this.getPassword}}</div>
           <my-input v-model="password" v-if="InputActive">{{this.getPassword}}</my-input>
         </div>
-
-        <div class="email">Email: <div>{{this.getEmail}}</div>
-          <my-input v-model="email" v-if="InputActive">{{this.getEmail}}</my-input>
+-->
+        <div class="email">Email: <div>{{getEmail}}</div>
+          <my-input v-model="email" v-if="InputActive"></my-input>
         </div>
       </div>
 
-      <my-button  @click="updateUser" class="btn-save" v-if="InputActive">
+      <my-button @click="saveProfile" class="btn-save" v-if="InputActive">
         Save
       </my-button>
     </div>
@@ -45,6 +47,7 @@ import MySidePanel from "@/components/UI/MySidePanel.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import {mapState, mapMutations, mapGetters,mapActions} from "vuex";
 import MyInput from "@/components/UI/MyInput.vue";
+import {update} from "vue-click-outside";
 
 export default {
   components:{MyInput, MyButton, MySidePanel},
@@ -52,16 +55,19 @@ export default {
     return {
       dialogVisible: false,
       InputActive:false,
-      login: "",
+      id:"",
+      name: "",
       password: "",
       email:"",
     }
   },
 
   methods:{
+    update,
     ...mapActions({
-      UpdateUsers:'Auth/UpdateUsers',
-      isApi:'Auth/initApi'
+      //UpdateUsers:'Auth/UpdateUsers',
+      isApi:'Auth/initApi',
+      getUser:'Auth/getUser'
     }),
     ...mapMutations({
       setUserSuccess:'Auth/setUserSuccess',
@@ -77,22 +83,34 @@ export default {
     Edit(){
       this.InputActive=true;
     },
-    updateUser(){
+
+    saveProfile(){
       this.Edit()
       let data = {
-        login: this.login,
-       // email: this.email,
-        password: this.password,
+        name: this.name,
+        email: this.email,
+        //password: this.password,
       }
       console.log(data)
-      this.UpdateUsers(data)
+      //this.saveProfile(data)
       this.InputActive=false
+
+      
       //вызываем мутацию для конкретного юзера
       // в котором данные заменяем на новые
       //this.$store.commit('setUpdateUsers', data)
       //this.$store.commit('setUpdateUsers', data)
       //нужно еще токен заменить?
-    }
+    },
+
+  },
+
+  mounted(){
+
+    console.log("PROFILE")
+    let id= localStorage.getItem('id', this.$id);
+    console.log(id)
+    this.getUser( id);
   },
   computed: {
     ...mapState({
@@ -103,20 +121,15 @@ export default {
       getLogin:'Auth/getLogin',
       getPassword:'Auth/getPassword',
       getEmail:'Auth/getEmail',
+      getById:'Auth/getById',
     }),
-    getLogin () {
-      return this.$store.getters.getLogin
-    },
+    getLogin: state=>state.user.name,
     getPassword(){
       return this.$store.getters.getPassword
     },
-    getEmail(){
-      return this.$store.getters.getEmail
-    }
+    getEmail: state=>state.user.email,
+    getById:state=>state.user.id,
   },
-  mounted() {
-    this.initApi()
-  }
 }
 
 
