@@ -14,14 +14,25 @@
     <div >
       <div class="text-content">
 
+        <div>
+          <h2 >MAIN</h2>
+          <my-input v-model="url" required placeholder="group url" type="text" autofocus></my-input>
+          <br/>
+          <my-button class="btn" @click.prevent=""  type="submit">add to tracked</my-button>
+          <my-button class="btn" @click.prevent="getStatistics"  type="submit">get statistics</my-button>
+        </div>
 
-        MAIN
-
-        Но в отличие от v-if директива v-show не изменяет структуру DOM, а манипулирует значением стилевого свойства display. То есть если условие в v-show возвращает false, то для элемента устанавливается стиль display:none;, и тем самым данный элемент скрывается на веб-странице.
-
-        В то же время манипуляции с DOM через v-if увеличивают накладные расходы и снижают производительность. Поэтому в тех ситуациях, когда возможно частое переключение видимости элемента, следует предпочитать v-show.
+        <div id="content_">
+          Group Name:{{this.group_name}}
+          Group Id:{{this.group_id}}
+          Description:{{this.description}}
+          <img src={{this.avatar}}>
+        </div>
       </div>
+
+
     </div>
+
 
   </div>
 </template>
@@ -30,22 +41,26 @@
 <script>
 import MySidePanel from "@/components/UI/MySidePanel.vue";
 import MyButton from "@/components/UI/MyButton.vue";
+import MyInput from "@/components/UI/MyInput.vue";
+import axios from "axios";
 import {mapActions, mapGetters, mapState} from "vuex";
+import MyBorderBlock from "@/components/UI/MyBorderBlock.vue";
 
 export default {
-  components:{MyButton, MySidePanel},
+  components:{MyBorderBlock, MyButton, MySidePanel, MyInput},
   data() {
     return {
       dialogVisible: false,
-      id:"",
-      name: "",
+      url: "",
+      group_id:"",
+      group_name:"",
+      description:"",
+      status:"",
+      avatar:""
     }
   },
   methods:{
 
-    ...mapActions({
-      initApi:'Auth/initApi',
-    }),
     showDialog() {
       this.dialogVisible = true;
     },
@@ -53,20 +68,33 @@ export default {
       this.dialogVisible = false;
       console.log("no")
     },
-  },
-  mounted() {
-    this.initApi()
+    getStatistics(){
+      let url=this.url;
+      axios.post('http://diploma.local:8000/api/main/mainInfoAboutGroups', {url})
+          .then(response=> {
+            //console.log("getStatistics");
+            console.log(response.data);
+            console.log(response.data.avatar);
+            this.group_name=response.data.name;//[...this.group_name, ...response.data.name];//response.data.name;
+            this.group_id=response.data.group_id;
+            this.description=response.data.description;
+            this.status=response.data.status;
+            this.avatar=response.data.avatar;
+            // const node = document.createElement("img");
+            // node.src = this.avatar;
+            // var div = document.getElementById('content_');
+            //
+            // div.appendChild(node);
+            //https://vk.com/marusiaproject
+          });
+    }
+
   },
   computed:{
     ...mapState({
       user: state => state.Auth.user,
     }),
-    ...mapGetters({
-      getById:'Auth/getById',
-      getLogin:'Auth/getLogin',
-    }),
-    getById: state=>state.user.id,
-    getLogin: state=>state.user.name,
+
 
   }
 }
@@ -82,7 +110,10 @@ export default {
 .text-content{
   display: flex;
   height: 100vh;
-  padding-top: 15%;
+  padding-top: 25%;
+
+  justify-content: center;
+
 }
 .active{
   background: lightgray;
@@ -95,5 +126,14 @@ export default {
   padding: 11px;
   margin: 8px;
   border: 3px solid midnightblue;
+}
+#content_{
+  display: flex;
+
+  flex-direction: row;
+  height: 50%;
+  font-size: 30px;
+  position: relative;
+  padding-top: 10%;
 }
 </style>

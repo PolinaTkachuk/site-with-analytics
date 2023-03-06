@@ -4,6 +4,7 @@ export const AuthModule = {
     state: () => ({
         status: '',
         token: localStorage.getItem('access_token') || '',
+        id: localStorage.getItem('id') || '',
         user : [{
           /*  id:'',
             name:'',
@@ -85,27 +86,30 @@ export const AuthModule = {
                     commit('setStatusError', error)
                 })
         },
+        saveProfile({state, commit}, user) {
+            return new Promise((resolve, reject) => {
+                console.log("saveProfile");
+                axios.post('http://diploma.local:8000/api/main/saveProfile', {user})
+                        .then(response=>{
+                                console.log("saveProfile");
+                                let convert_response = JSON.parse(JSON.stringify(response.data));
+                                //const token =  convert_response.access_token;  //получаем токен от сервера
+                                //токен сохраняем тому же пользователю с новыми данными юзера
+                                // let token = localStorage.getItem('access_token')
+                                // commit('setUserSuccess', user, token)
 
-        /*
-        async UpdateUsers({state, commit}, user) {
-            try {
-                //const response = await axios.get('https://localhost:8080/AuthUsers', {user})
-                //let user=   response.data.user
-                //токен сохраняем тому же пользователю с новыми данными юзера
-                let token = localStorage.getItem('access_token')
-                commit('setUpdateUsers', user, token)
+                        })
+            })
+                .catch (error =>{
+                    console.log(error)
+                    commit('setStatusError', error)
+                })
 
-                console.log(token)
-                console.log(user)
-            } catch (e) {
-                console.log(e)
-            }
         },
 
-*/
        async getUser({commit, state},id) {
            {
-               console.log('AAAAAA');
+               return new Promise((resolve, reject) => {
                 axios.get('http://diploma.local:8000/api/main/profile',{
                     params:{id:id}
                     })
@@ -118,6 +122,7 @@ export const AuthModule = {
                    console.log(convert_response.email);
                    commit('setEmail', convert_response.email)
                    commit('setName', convert_response.name);
+               })
                }).catch(error => console.log(error))
 
            }

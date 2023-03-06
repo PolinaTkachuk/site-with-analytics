@@ -12,6 +12,7 @@
     "vue": "^3.2.13",
     "vue-click-outside": "^1.1.0",
     "vue-router": "^4.0.3",
+    "vuelidate": "^0.7.7",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

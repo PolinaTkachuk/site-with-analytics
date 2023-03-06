@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <my-button @click="saveProfile" class="btn-save" v-if="InputActive">
+      <my-button @click="saveProfile_" class="btn-save" v-if="InputActive">
         Save
       </my-button>
     </div>
@@ -48,6 +48,7 @@ import MyButton from "@/components/UI/MyButton.vue";
 import {mapState, mapMutations, mapGetters,mapActions} from "vuex";
 import MyInput from "@/components/UI/MyInput.vue";
 import {update} from "vue-click-outside";
+import router from "@/router";
 
 export default {
   components:{MyInput, MyButton, MySidePanel},
@@ -59,14 +60,14 @@ export default {
       name: "",
       password: "",
       email:"",
+      count:1,
     }
   },
 
   methods:{
     update,
     ...mapActions({
-      //UpdateUsers:'Auth/UpdateUsers',
-      isApi:'Auth/initApi',
+      saveProfile:'Auth/saveProfile',
       getUser:'Auth/getUser'
     }),
     ...mapMutations({
@@ -84,18 +85,22 @@ export default {
       this.InputActive=true;
     },
 
-    saveProfile(){
+    saveProfile_(){
       this.Edit()
       let data = {
         name: this.name,
         email: this.email,
         //password: this.password,
       }
-      console.log(data)
-      //this.saveProfile(data)
-      this.InputActive=false
+      this.saveProfile(data)
+      . then(() =>{
+        console.log(data);
+        this.InputActive=false
+      })
+          .catch(err => console.log(err))
 
-      
+
+
       //вызываем мутацию для конкретного юзера
       // в котором данные заменяем на новые
       //this.$store.commit('setUpdateUsers', data)
@@ -106,11 +111,11 @@ export default {
   },
 
   mounted(){
+      let id= JSON.parse(localStorage.getItem('id', this.$id));
+      //console.log(id)
+      this.getUser( id);
+      //console.log("PROFILE")
 
-    console.log("PROFILE")
-    let id= localStorage.getItem('id', this.$id);
-    console.log(id)
-    this.getUser( id);
   },
   computed: {
     ...mapState({
